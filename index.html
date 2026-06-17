@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExpenseTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== LOGIN PAGE ===== -->
+  <div id="loginPage" class="login-page">
+    <div class="login-card">
+      <h1>Welcome to ExpenseTrack</h1>
+      <p class="login-subtitle">Manage your finances effortlessly</p>
+      <form id="loginForm">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="loginName" placeholder="Your full name" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" placeholder="your.email@example.com" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="Enter any password" class="form-input">
+        </div>
+        <button type="submit" class="btn-primary btn-full">Get Started</button>
+        <p class="login-note">All fields are optional — enter any values to continue</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== MAIN APP ===== -->
+  <div id="appContainer" class="hidden">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="nav-brand">ExpenseTrack</div>
+      <ul class="nav-links">
+        <li><a href="#" class="nav-item active" data-page="dashboard">Dashboard</a></li>
+        <li><a href="#" class="nav-item" data-page="reports">Reports</a></li>
+        <li><a href="#" class="nav-item" data-page="analytics">Analytics</a></li>
+        <li><a href="#" class="nav-item" data-page="settings">Settings</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-icon" id="darkModeBtn" title="Toggle dark mode">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+        <div class="nav-avatar" id="navAvatar" data-page="settings">U</div>
+      </div>
+    </nav>
+
+    <!-- Pages -->
+    <main class="main-content">
+
+      <!-- ===== DASHBOARD ===== -->
+      <section id="dashboardPage" class="page">
+        <h2 class="page-title">Dashboard</h2>
+
+        <div class="balance-card">
+          <div class="balance-label">Total Balance</div>
+          <div class="balance-amount" id="totalBalance">Rs0</div>
+          <div class="balance-change" id="balanceChange">+0% from last month</div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-icon income-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-label">Total Income</div>
+              <div class="stat-value income-text" id="totalIncome">Rs0</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon expense-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-label">Total Expenses</div>
+              <div class="stat-value expense-text" id="totalExpenses">Rs0</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon savings-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-label">Savings Goal</div>
+              <div class="stat-value" id="savingsGoalDisplay">Rs0 / Rs0</div>
+              <div class="savings-bar"><div class="savings-bar-fill" id="savingsFill"></div></div>
+              <div class="savings-caption" id="savingsCaption">0% achieved — Holiday fund</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="insights-row" id="insightsRow"></div>
+
+        <div class="charts-row">
+          <div class="chart-card"><h3 class="chart-title">Monthly Spending</h3><div class="chart-wrap"><canvas id="monthlySpendingChart"></canvas></div></div>
+          <div class="chart-card"><h3 class="chart-title">By Category</h3><div class="chart-wrap"><canvas id="categoryChart"></canvas></div></div>
+          <div class="chart-card"><h3 class="chart-title">Income vs Expenses</h3><div class="chart-wrap"><canvas id="incomeExpenseChart"></canvas></div></div>
+        </div>
+
+        <div class="budget-card">
+          <div class="budget-header">
+            <h3 id="budgetTitle">Monthly Budget</h3>
+            <span class="budget-pct" id="budgetPct">0% used</span>
+          </div>
+          <div class="budget-bar"><div class="budget-fill" id="budgetFill"></div></div>
+          <div class="budget-footer">
+            <span id="budgetSpent">Spent: Rs0</span>
+            <span id="budgetRemaining">Remaining: Rs0</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="tx-header">
+            <h3>Recent Transactions</h3>
+            <div class="tx-controls">
+              <input type="text" id="searchInput" placeholder="Search..." class="search-input">
+              <select id="categoryFilter" class="filter-select">
+                <option value="">All Categories</option>
+              </select>
+            </div>
+          </div>
+          <div id="transactionsList"></div>
+        </div>
+      </section>
+
+      <!-- ===== REPORTS ===== -->
+      <section id="reportsPage" class="page hidden">
+        <h2 class="page-title">Reports</h2>
+        <div class="reports-stats">
+          <div class="report-card">
+            <div class="report-icon calendar-bg">📅</div>
+            <div><div class="report-label">This Month Total</div><div class="report-value" id="rTotal">Rs0</div></div>
+          </div>
+          <div class="report-card">
+            <div class="report-icon income-bg">↗</div>
+            <div><div class="report-label">Income</div><div class="report-value income-text" id="rIncome">Rs0</div></div>
+          </div>
+          <div class="report-card">
+            <div class="report-icon expense-bg">↙</div>
+            <div><div class="report-label">Expenses</div><div class="report-value expense-text" id="rExpenses">Rs0</div></div>
+          </div>
+          <div class="report-card">
+            <div class="report-icon saved-bg">⭐</div>
+            <div><div class="report-label">Saved</div><div class="report-value" id="rSaved">Rs0</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="section-title">Category Breakdown</h3>
+          <div id="categoryBreakdown"></div>
+        </div>
+      </section>
+
+      <!-- ===== ANALYTICS ===== -->
+      <section id="analyticsPage" class="page hidden">
+        <h2 class="page-title">Analytics</h2>
+        <div class="analytics-charts">
+          <div class="chart-card"><h3 class="chart-title">12-Month Spending Trend</h3><div class="chart-wrap"><canvas id="trendChart"></canvas></div></div>
+          <div class="chart-card"><h3 class="chart-title">Monthly Comparison</h3><div class="chart-wrap"><canvas id="comparisonChart"></canvas></div></div>
+        </div>
+        <div class="analytics-stats">
+          <div class="analytics-card"><div class="analytics-value income-text" id="avgSpend">Rs0</div><div class="analytics-label">Avg Monthly Spend</div></div>
+          <div class="analytics-card"><div class="analytics-value income-text" id="avgIncome">Rs0</div><div class="analytics-label">Avg Monthly Income</div></div>
+          <div class="analytics-card"><div class="analytics-value expense-text" id="avgSavings">Rs0</div><div class="analytics-label">Avg Monthly Savings</div></div>
+        </div>
+      </section>
+
+      <!-- ===== SETTINGS ===== -->
+      <section id="settingsPage" class="page hidden">
+        <h2 class="page-title">Settings</h2>
+        <div class="settings-card">
+          <div class="settings-section">
+            <h3 class="settings-heading">Profile</h3>
+            <div class="profile-row">
+              <div class="profile-avatar" id="profileAvatar">U</div>
+              <div>
+                <div class="profile-name" id="profileName">User</div>
+                <div class="profile-email" id="profileEmail">user@example.com</div>
+              </div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="settings-section">
+            <h3 class="settings-heading">Preferences</h3>
+            <div class="pref-row">
+              <span>Currency</span>
+              <select id="currencySelect" class="pref-select">
+                <option value="Rs">PKR (Rs)</option>
+                <option value="$">USD ($)</option>
+                <option value="£">GBP (£)</option>
+                <option value="€">EUR (€)</option>
+                <option value="¥">JPY (¥)</option>
+              </select>
+            </div>
+            <div class="pref-row">
+              <span>Push Notifications</span>
+              <input type="checkbox" id="pushNotif" class="pref-check" checked>
+            </div>
+            <div class="pref-row">
+              <span>Weekly Summary Email</span>
+              <input type="checkbox" id="weeklySummary" class="pref-check" checked>
+            </div>
+            <div class="pref-row">
+              <span>Dark Mode</span>
+              <input type="checkbox" id="darkModeCheck" class="pref-check">
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="settings-section">
+            <h3 class="settings-heading danger-heading">Danger Zone</h3>
+            <button class="btn-danger" id="resetBtn">Reset All Data</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ===== ADD TRANSACTION MODAL ===== -->
+  <div id="modalOverlay" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Add Transaction</h3>
+        <button class="modal-close" id="modalCloseBtn">&times;</button>
+      </div>
+      <form id="txForm">
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="txTitle" placeholder="Transaction title" required class="form-input">
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Amount (Rs)</label>
+            <input type="number" id="txAmount" placeholder="0" required min="1" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select id="txType" class="form-input">
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="txCategory" class="form-input">
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Health">Health</option>
+              <option value="Education">Education</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Bills">Bills</option>
+              <option value="Subscriptions">Subscriptions</option>
+              <option value="Salary">Salary</option>
+              <option value="Freelance">Freelance</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="txDate" class="form-input" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="txNotes" class="form-input form-textarea" placeholder="Optional notes..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn-primary">Add Transaction</button>
+          <button type="button" class="btn-secondary" id="modalCancelBtn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FAB -->
+  <button class="fab" id="fabBtn">+</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
